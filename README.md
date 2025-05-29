@@ -73,4 +73,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-4. Vercel deploys the latest version from this repository
+This project is licensed under the MIT License - see the LICENSE file for details.
