@@ -1,30 +1,76 @@
-# Wanderway App Requirements
+# Wanderway - Virtual Travel Experience
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
-
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/treasuurays-projects/v0-wanderway-app-requirements)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/KFZ98NewAiv)
+![Wanderway Logo](public/logo.png)
 
 ## Overview
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+Wanderway is a virtual travel platform that allows users to explore destinations around the world from the comfort of their home. Our interactive experiences combine high-quality videos, immersive tours, and detailed information about global attractions.
 
-## Deployment
+## Features
 
-Your project is live at:
+- **Virtual Tours**: Explore famous landmarks and hidden gems through immersive 360° experiences
+- **Destination Discovery**: Browse curated collections of global attractions with detailed information
+- **Interactive Maps**: Navigate destinations with our interactive mapping system
+- **User Profiles**: Save favorite destinations and create personalized travel wishlists
+- **Multi-platform**: Available on web, mobile, and compatible with VR headsets
 
-**[https://vercel.com/treasuurays-projects/v0-wanderway-app-requirements](https://vercel.com/treasuurays-projects/v0-wanderway-app-requirements)**
+## Technology Stack
 
-## Build your app
+- **Frontend**: Next.js, React, TypeScript, Tailwind CSS
+- **UI Components**: Shadcn UI, Radix UI
+- **Styling**: Tailwind CSS with custom theming
+- **State Management**: React Hooks
+- **Deployment**: Vercel
 
-Continue building your app on:
+## Getting Started
 
-**[https://v0.dev/chat/projects/KFZ98NewAiv](https://v0.dev/chat/projects/KFZ98NewAiv)**
+### Prerequisites
 
-## How It Works
+- Node.js 18.x or higher
+- pnpm (recommended) or npm
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/wanderway.git
+   cd wanderway
+   ```
+
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+
+3. Run the development server:
+   ```bash
+   pnpm dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+## Project Structure
+
+```
+wanderway/
+├── app/                # Next.js app directory
+│   ├── about/          # About page
+│   ├── api/            # API routes
+│   ├── login/          # Authentication pages
+│   ├── overview/       # Dashboard and analytics
+│   ├── search/         # Search functionality
+│   ├── settings/       # User settings
+│   └── users/          # User profiles
+├── components/         # Reusable UI components
+├── lib/                # Utility functions and shared logic
+├── public/             # Static assets
+└── styles/             # Global styles
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
