@@ -5,16 +5,17 @@ import { Button } from "@/components/ui/button"
 import { Map, Info, Users, Settings, Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export default function Sidebar() {
   const { theme, setTheme } = useTheme()
-  const [activeItem, setActiveItem] = useState("map")
+  const pathname = usePathname()
 
   const menuItems = [
-    { id: "map", label: "Map", icon: Map, href: "#map" },
-    { id: "about", label: "About Us", icon: Info, href: "#about" },
-    { id: "users", label: "Users", icon: Users, href: "#users" },
-    { id: "settings", label: "Settings", icon: Settings, href: "#settings" },
+    { id: "map", label: "Map", icon: Map, href: "/map" },
+    { id: "about", label: "About Us", icon: Info, href: "/about" },
+    { id: "users", label: "Users", icon: Users, href: "/users" },
+    { id: "settings", label: "Settings", icon: Settings, href: "/settings" },
   ]
 
   return (
@@ -27,9 +28,8 @@ export default function Sidebar() {
             <Link
               key={item.id}
               href={item.href}
-              onClick={() => setActiveItem(item.id)}
               className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                activeItem === item.id ? "bg-blue-700 dark:bg-blue-900" : "hover:bg-blue-700 dark:hover:bg-blue-900"
+                pathname === item.href ? "bg-blue-700 dark:bg-blue-900" : "hover:bg-blue-700 dark:hover:bg-blue-900"
               }`}
             >
               <item.icon className="h-5 w-5" />

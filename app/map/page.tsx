@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -57,113 +57,70 @@ export default function MapPage() {
     featured: false,
   })
 
-  // Mock map locations data
-  const [locations] = useState<MapLocation[]>([
-    {
-      id: "1",
-      name: "Eiffel Tower",
-      coordinates: { lat: 48.8584, lng: 2.2945 },
-      type: "landmark",
-      rating: 4.8,
-      tours: 12,
-      image: "/placeholder.svg?height=200&width=300",
-      description: "Iconic iron lattice tower in Paris, France",
-      country: "France",
-      continent: "Europe",
-      featured: true,
-    },
-    {
-      id: "2",
-      name: "Great Wall of China",
-      coordinates: { lat: 40.4319, lng: 116.5704 },
-      type: "historical",
-      rating: 4.9,
-      tours: 8,
-      image: "/placeholder.svg?height=200&width=300",
-      description: "Ancient fortification in northern China",
-      country: "China",
-      continent: "Asia",
-      featured: true,
-    },
-    {
-      id: "3",
-      name: "Machu Picchu",
-      coordinates: { lat: -13.1631, lng: -72.545 },
-      type: "historical",
-      rating: 4.7,
-      tours: 6,
-      image: "/placeholder.svg?height=200&width=300",
-      description: "Ancient Incan citadel in Peru",
-      country: "Peru",
-      continent: "South America",
-      featured: true,
-    },
-    {
-      id: "4",
-      name: "Tokyo",
-      coordinates: { lat: 35.6762, lng: 139.6503 },
-      type: "city",
-      rating: 4.6,
-      tours: 15,
-      image: "/placeholder.svg?height=200&width=300",
-      description: "Modern metropolis blending tradition and innovation",
-      country: "Japan",
-      continent: "Asia",
-      featured: false,
-    },
-    {
-      id: "5",
-      name: "Colosseum",
-      coordinates: { lat: 41.8902, lng: 12.4922 },
-      type: "historical",
-      rating: 4.5,
-      tours: 9,
-      image: "/placeholder.svg?height=200&width=300",
-      description: "Ancient amphitheatre in Rome, Italy",
-      country: "Italy",
-      continent: "Europe",
-      featured: false,
-    },
-    {
-      id: "6",
-      name: "Petra",
-      coordinates: { lat: 30.3285, lng: 35.4444 },
-      type: "historical",
-      rating: 4.8,
-      tours: 7,
-      image: "/placeholder.svg?height=200&width=300",
-      description: "Archaeological city in Jordan",
-      country: "Jordan",
-      continent: "Asia",
-      featured: true,
-    },
-    {
-      id: "7",
-      name: "Santorini",
-      coordinates: { lat: 36.3932, lng: 25.4615 },
-      type: "nature",
-      rating: 4.7,
-      tours: 5,
-      image: "/placeholder.svg?height=200&width=300",
-      description: "Beautiful Greek island with stunning sunsets",
-      country: "Greece",
-      continent: "Europe",
-      featured: false,
-    },
-    {
-      id: "8",
-      name: "New York City",
-      coordinates: { lat: 40.7128, lng: -74.006 },
-      type: "city",
-      rating: 4.4,
-      tours: 18,
-      image: "/placeholder.svg?height=200&width=300",
-      description: "The city that never sleeps",
-      country: "USA",
-      continent: "North America",
-      featured: false,
-    },
-  ])
+  const [locations, setLocations] = useState<MapLocation[]>([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    async function fetchLocations() {
+      try {
+        const response = await fetch('/api/places?limit=20&fields=fsq_id,name,description,location,categories,rating,photos,geocodes');
+        const data = await response.json();
+        
+        if (data.success && data.data) {
+          // Transform Foursquare data to match your MapLocation interface
+          const transformedLocations = await Promise.all(data.data.map(async (place: any) => {
+            let imageUrl = "/placeholder.svg?height=200&width=300"; // Default placeholder
+            
+            // Try to get photos
+            if (place.photos && place.photos.length > 0) {
+              const photo = place.photos[0];
+              imageUrl = `${photo.prefix}original${photo.suffix}`;
+            } else {
+              // If no photos in the initial response, try to fetch them
+              try {
+                const photosResponse = await fetch(`/api/places/${place.fsq_id}/photos`);
+                if (photosResponse.ok) {
+                  const photosData = await photosResponse.json();
+                  if (photosData.success && photosData.data && photosData.data.length > 0) {
+                    imageUrl = photosData.data[0].url;
+                  }
+                }
+              } catch (photoError) {
+                console.error("Error fetching photos for place:", place.fsq_id);
+              }
+            }
+            
+            return {
+              id: place.fsq_id,
+              name: place.name,
+              coordinates: { 
+                lat: place.geocodes?.main?.latitude || 0, 
+                lng: place.geocodes?.main?.longitude || 0 
+              },
+              type: getCategoryType(place.categories?.[0]?.name),
+              rating: place.rating ? place.rating / 2 : 4.5, // Foursquare uses 0-10 scale
+              tours: Math.floor(Math.random() * 20) + 1, // Mock data
+              image: imageUrl,
+              description: place.description || `Explore ${place.name}`,
+              country: place.location?.country || "",
+              continent: getContinent(place.location?.country),
+              featured: Math.random() > 0.7, // Random featured status
+            };
+          }));
+          
+          setLocations(transformedLocations);
+        }
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+        // Fallback to mock data if API fails
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    setLoading(true);
+    fetchLocations();
+  }, []);
 
   const filteredLocations = locations.filter((location) => {
     if (filters.type !== "all" && location.type !== filters.type) return false
@@ -202,6 +159,53 @@ export default function MapPage() {
       default:
         return "bg-gray-500"
     }
+  }
+
+  // Helper function to determine category type
+  function getCategoryType(category: string): "landmark" | "city" | "nature" | "historical" {
+    const categoryMap: Record<string, "landmark" | "city" | "nature" | "historical"> = {
+      "Monument": "landmark",
+      "Historic Site": "historical",
+      "Museum": "historical",
+      "Park": "nature",
+      "Mountain": "nature",
+      "Beach": "nature",
+      "City": "city",
+      "Town": "city",
+    };
+    
+    // Default mappings based on category name
+    if (category?.includes("Park") || category?.includes("Garden")) return "nature";
+    if (category?.includes("Museum") || category?.includes("Historic")) return "historical";
+    if (category?.includes("Monument") || category?.includes("Tower")) return "landmark";
+    
+    return categoryMap[category] || "landmark";
+  }
+
+  // Helper function to determine continent
+  function getContinent(country: string): string {
+    // Simple mapping for demo purposes
+    const continentMap: Record<string, string> = {
+      "United States": "North America",
+      "Canada": "North America",
+      "Mexico": "North America",
+      "Brazil": "South America",
+      "Argentina": "South America",
+      "United Kingdom": "Europe",
+      "France": "Europe",
+      "Germany": "Europe",
+      "Italy": "Europe",
+      "Spain": "Europe",
+      "China": "Asia",
+      "Japan": "Asia",
+      "India": "Asia",
+      "Australia": "Oceania",
+      "New Zealand": "Oceania",
+      "Egypt": "Africa",
+      "South Africa": "Africa",
+    };
+    
+    return continentMap[country] || "Unknown";
   }
 
   return (

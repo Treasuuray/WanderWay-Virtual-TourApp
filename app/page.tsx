@@ -1,8 +1,8 @@
-import { Suspense } from "react"
+'Use client'
 import Sidebar from "@/components/sidebar"
-import MainContent from "@/components/main-content"
 import Footer from "@/components/footer"
 import Navbar from "@/components/navbar"
+import MainContentWrapper from "@/components/main-content-wrapper"
 
 export default function HomePage() {
   return (
@@ -11,9 +11,7 @@ export default function HomePage() {
       <div className="flex">
         <Sidebar />
         <div className="flex-1 ml-64">
-          <Suspense fallback={<div className="p-8">Loading...</div>}>
-            <MainContent />
-          </Suspense>
+          <MainContentWrapper />
           <Footer />
         </div>
       </div>

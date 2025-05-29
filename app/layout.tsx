@@ -8,16 +8,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "WANDERWAY - Virtual World Tours",
-  description:
-    "Experience the world's most beautiful destinations from the comfort of your home. Virtual tours that bring global wonders to your screen.",
-  keywords: "virtual tours, travel, destinations, world attractions, online tourism",
-  authors: [{ name: "WANDERWAY Team" }],
-  openGraph: {
-    title: "WANDERWAY - Virtual World Tours",
-    description: "Experience the world from home with immersive virtual tours",
-    type: "website",
-  },
-    generator: 'v0.dev'
+  description: "Experience the world's most beautiful destinations from the comfort of your home.",
 }
 
 export default function RootLayout({
@@ -27,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>

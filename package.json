@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "cross-env PORT=0 next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "rm -rf .next && cross-env PORT=0 next dev"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -41,15 +42,15 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
-    "date-fns": "4.1.0",
+    "date-fns": "^3.0.0",
     "embla-carousel-react": "8.5.1",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
     "next": "15.2.4",
     "next-themes": "latest",
-    "react": "^19",
+    "react": "18.3.1",
     "react-day-picker": "8.10.1",
-    "react-dom": "^19",
+    "react-dom": "18.3.1",
     "react-hook-form": "^7.54.1",
     "react-resizable-panels": "^2.1.7",
     "recharts": "2.15.0",
@@ -61,9 +62,13 @@
   },
   "devDependencies": {
     "@types/node": "^22",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "18.3.23",
+    "@types/react-dom": "18.3.7",
+    "babel-plugin-react-compiler": "^19.0.0-beta-af1b7da-20250417",
+    "cross-env": "^7.0.3",
+    "eslint-plugin-react-compiler": "^19.0.0-beta-af1b7da-20250417",
     "postcss": "^8",
+    "react-compiler-runtime": "^19.0.0-beta-af1b7da-20250417",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
   }
